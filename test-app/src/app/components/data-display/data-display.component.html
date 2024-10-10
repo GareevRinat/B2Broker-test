@@ -1,0 +1,52 @@
+<label>
+  Interval (ms):
+  <input type="number" #intervalInput />
+</label>
+
+<label>
+  Array size:
+  <input type="number" #arraySizeInput />
+</label>
+
+<button (click)="updateWorkerSettings(parseInt(intervalInput.value), parseInt(arraySizeInput.value))">
+  Update Settings
+</button>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <!-- ID Column -->
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef> ID </th>
+    <td mat-cell *matCellDef="let element"> {{ element.id }} </td>
+  </ng-container>
+
+  <!-- Integer Column -->
+  <ng-container matColumnDef="int">
+    <th mat-header-cell *matHeaderCellDef> Integer </th>
+    <td mat-cell *matCellDef="let element"> {{ element.int }} </td>
+  </ng-container>
+
+  <!-- Float Column -->
+  <ng-container matColumnDef="float">
+    <th mat-header-cell *matHeaderCellDef> Float </th>
+    <td mat-cell *matCellDef="let element"> {{ element.float }} </td>
+  </ng-container>
+
+  <!-- Color Column -->
+  <ng-container matColumnDef="color">
+    <th mat-header-cell *matHeaderCellDef> Color </th>
+    <td mat-cell *matCellDef="let element" [style.background-color]="element.color"> {{ element.color }} </td>
+  </ng-container>
+
+  <!-- Child Column (combined ID and Color) -->
+  <ng-container matColumnDef="child">
+    <th mat-header-cell *matHeaderCellDef> Child </th>
+    <td mat-cell *matCellDef="let element">
+      <div>ID: {{ element.child.id }}</div>
+      <div [style.background-color]="element.child.color">Color: {{ element.child.color }}</div>
+    </td>
+  </ng-container>
+
+  <!-- Header and Row Definitions -->
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns; trackBy: trackById"></tr>
+</table>
