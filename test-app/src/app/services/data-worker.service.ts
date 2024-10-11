@@ -8,11 +8,11 @@ import { DataElement } from '../models/data.model';
 export class DataWorkerService {
   private dataSubject = new BehaviorSubject<DataElement[]>([]);
   public data$: Observable<DataElement[]> = this.dataSubject.asObservable();
-  private readonly worker: Worker | undefined;
+  private worker: Worker | undefined;
 
   constructor() {
     if (typeof Worker !== 'undefined') {
-      this.worker = new Worker(new URL('../../workers/data-worker.worker', import.meta.url));
+      this.worker = new Worker(new URL('../workers/data-worker.worker', import.meta.url));
 
 
       this.worker.onmessage = ({ data }) => {
@@ -26,6 +26,13 @@ export class DataWorkerService {
   updateWorkerConfig(interval: number, arraySize: number) {
     if (this.worker) {
       this.worker.postMessage({ interval, arraySize });
+    }
+  }
+
+  terminateWorker() {
+    if (this.worker) {
+      this.worker.terminate();
+      this.worker = undefined;
     }
   }
 }
